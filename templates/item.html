@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ item.item_name }} - College Lost & Found</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-dark bg-primary">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="/">
+            🎓 College Lost & Found
+        </a>
+
+        <div>
+
+            <a href="/items"
+               class="btn btn-light btn-sm me-2">
+                Browse Items
+            </a>
+
+            {% if session.get("user_id") %}
+
+                <a href="/dashboard"
+                   class="btn btn-outline-light btn-sm">
+                    Dashboard
+                </a>
+
+            {% else %}
+
+                <a href="/login"
+                   class="btn btn-outline-light btn-sm">
+                    Login
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= ITEM DETAILS ================= -->
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow border-0">
+
+                <!-- Header -->
+
+                <div class="card-header bg-primary text-white p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <h2 class="mb-0">
+                            {{ item.item_name }}
+                        </h2>
+
+                        {% if item.status == "Lost" %}
+
+                            <span class="badge bg-danger fs-6">
+                                Lost
+                            </span>
+
+                        {% elif item.status == "Found" %}
+
+                            <span class="badge bg-success fs-6">
+                                Found
+                            </span>
+
+                        {% elif item.status == "Claim Pending" %}
+
+                            <span class="badge bg-warning text-dark fs-6">
+                                Claim Pending
+                            </span>
+
+                        {% elif item.status == "Claim Approved" %}
+
+                            <span class="badge bg-info text-dark fs-6">
+                                Claim Approved
+                            </span>
+
+                        {% elif item.status == "Returned" %}
+
+                            <span class="badge bg-secondary fs-6">
+                                Returned
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary fs-6">
+                                {{ item.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Body -->
+
+                <div class="card-body p-4">
+
+
+                    <!-- Category -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold">
+                            Category
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            {{ item.category }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Type -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold">
+                            Item Type
+                        </h5>
+
+                        {% if item.item_type == "Lost" %}
+
+                            <span class="badge bg-danger">
+                                Lost Item
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-success">
+                                Found Item
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold">
+                            Description
+                        </h5>
+
+                        <div class="p-3 bg-light rounded">
+
+                            {{ item.description }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Location -->
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-6">
+
+                            <h5 class="fw-bold">
+                                📍 Location
+                            </h5>
+
+                            <p class="text-muted">
+                                {{ item.location }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <h5 class="fw-bold">
+                                📅 Date Reported
+                            </h5>
+
+                            <p class="text-muted">
+                                {{ item.date_reported }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Reporter -->
+
+                    <div class="mb-4">
+
+                        <h5 class="fw-bold">
+                            Reported By
+                        </h5>
+
+                        <p class="text-muted">
+                            {{ item.reporter_name }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Claim Section -->
+
+                    {% if session.get("user_id") %}
+
+                        {% if item.status not in ["Claim Approved", "Returned"] %}
+
+                            <div class="border-top pt-4">
+
+                                <h5 class="fw-bold mb-3">
+                                    Is this your item?
+                                </h5>
+
+                                <p class="text-muted">
+                                    Submit a claim request with details
+                                    that can help verify your ownership.
+                                </p>
+
+                                <a href="{{ url_for('claim_item', item_id=item.item_id) }}"
+                                   class="btn btn-primary">
+
+                                    📩 Submit Claim Request
+
+                                </a>
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="alert alert-info">
+
+                                This item is currently marked as
+                                <strong>{{ item.status }}</strong>.
+
+                            </div>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <div class="alert alert-warning">
+
+                            Please
+                            <a href="/login"
+                               class="alert-link">
+                                log in
+                            </a>
+                            to submit a claim request.
+
+                        </div>
+
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+
+            <!-- Back -->
+
+            <div class="text-center mt-4">
+
+                <a href="/items"
+                   class="text-decoration-none">
+
+                    ← Back to All Items
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="bg-dark text-white text-center py-3">
+
+    <p class="mb-0">
+        © 2026 College Lost & Found Portal
+    </p>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

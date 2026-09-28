@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Report Lost Item - College Lost & Found</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-dark bg-primary">
+
+    <div class="container">
+
+        <a class="navbar-brand fw-bold"
+           href="/">
+
+            🎓 College Lost & Found
+
+        </a>
+
+
+        <div>
+
+            <a href="/items"
+               class="btn btn-light btn-sm me-2">
+
+                Browse Items
+
+            </a>
+
+
+            <a href="/dashboard"
+               class="btn btn-outline-light btn-sm">
+
+                Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8 col-lg-7">
+
+
+            <div class="card shadow border-0">
+
+
+                <!-- HEADER -->
+
+                <div class="card-header bg-danger text-white text-center py-4">
+
+                    <h2 class="mb-1">
+
+                        🔍 Report Lost Item
+
+                    </h2>
+
+
+                    <p class="mb-0">
+
+                        Tell us about the item you lost.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- BODY -->
+
+                <div class="card-body p-4">
+
+
+                    <!-- Flash Messages -->
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+
+                        {% if messages %}
+
+                            {% for category, message in messages %}
+
+                                <div class="alert
+                                    {% if category == 'success' %}
+                                        alert-success
+                                    {% else %}
+                                        alert-danger
+                                    {% endif %}">
+
+                                    {{ message }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        {% endif %}
+
+                    {% endwith %}
+
+
+
+                    <!-- FORM -->
+
+                    <form method="POST"
+                          action="{{ url_for('report_lost') }}">
+
+
+
+                        <!-- ITEM NAME -->
+
+                        <div class="mb-3">
+
+                            <label for="item_name"
+                                   class="form-label fw-semibold">
+
+                                Item Name
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="item_name"
+                                name="item_name"
+                                placeholder="Example: Black Wallet"
+                                required>
+
+                        </div>
+
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="mb-3">
+
+                            <label for="category"
+                                   class="form-label fw-semibold">
+
+                                Category
+
+                            </label>
+
+
+                            <select
+                                class="form-select"
+                                id="category"
+                                name="category"
+                                required>
+
+                                <option value="">
+                                    Select Category
+                                </option>
+
+                                <option value="Electronics">
+                                    Electronics
+                                </option>
+
+                                <option value="Books">
+                                    Books
+                                </option>
+
+                                <option value="Accessories">
+                                    Accessories
+                                </option>
+
+                                <option value="ID Card">
+                                    ID Card
+                                </option>
+
+                                <option value="Wallet">
+                                    Wallet
+                                </option>
+
+                                <option value="Keys">
+                                    Keys
+                                </option>
+
+                                <option value="Clothing">
+                                    Clothing
+                                </option>
+
+                                <option value="Documents">
+                                    Documents
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="mb-3">
+
+                            <label for="description"
+                                   class="form-label fw-semibold">
+
+                                Description
+
+                            </label>
+
+
+                            <textarea
+                                class="form-control"
+                                id="description"
+                                name="description"
+                                rows="4"
+                                placeholder="Describe the item, colour, brand, identifying marks, etc."
+                                required></textarea>
+
+                        </div>
+
+
+
+                        <!-- DATE -->
+
+                        <div class="mb-3">
+
+                            <label for="date_reported"
+                                   class="form-label fw-semibold">
+
+                                Date Lost
+
+                            </label>
+
+
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="date_reported"
+                                name="date_reported"
+                                required>
+
+                        </div>
+
+
+
+                        <!-- LOCATION -->
+
+                        <div class="mb-4">
+
+                            <label for="location"
+                                   class="form-label fw-semibold">
+
+                                Location Lost
+
+                            </label>
+
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="location"
+                                name="location"
+                                placeholder="Example: College Library"
+                                required>
+
+                        </div>
+
+
+
+                        <!-- INFORMATION -->
+
+                        <div class="alert alert-info">
+
+                            <strong>Tip:</strong>
+
+                            Include identifying details such as
+                            colour, brand, model, stickers or other
+                            unique features.
+
+                        </div>
+
+
+
+                        <!-- SUBMIT -->
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger btn-lg">
+
+                                Submit Lost Item
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BACK -->
+
+            <div class="text-center mt-4">
+
+                <a href="/"
+                   class="text-decoration-none">
+
+                    ← Back to Home
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="bg-dark text-white text-center py-3">
+
+    <p class="mb-0">
+
+        © 2026 College Lost & Found Portal
+
+    </p>
+
+</footer>
+
+
+
+<!-- Bootstrap JavaScript -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+<!-- Our JavaScript -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+
+</html>
