@@ -79,9 +79,14 @@ http://127.0.0.1:5000
 
 ## 🎥 Project Demonstration
 
-The project demonstration video shows the complete workflow:
+The complete project demonstration video is available on YouTube:
+
+[Watch the College Lost & Found Project Demo](https://youtu.be/5nLb0Xt3GNc)
+
+The video demonstrates the complete workflow:
 
 **Lost Item → Found Item → Claim Request → Admin Approval → Returned**
+
 
 ## 🎯 Project Purpose
 
